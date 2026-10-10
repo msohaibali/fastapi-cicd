@@ -1,1 +1,49 @@
+name: CI Build and Deploy to Render
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint Code via Ruff
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+      
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+            python-version: "3.13"
+            cache: pip
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Check Code via Ruff
+        run: ruff check .
+
+      - name: Format the Code via Ruff 
+        run: ruff format --check .
+
+  
+  build:
+    runs-on: ubuntu-slim
+    steps:
+    - uses: actions/checkout@v7
+    
+    - name: Verify Directory
+      run: |
+          echo "Current directory:"
+          pwd
+          echo "Workspace: $GITHUB_WORKSPACE"
+          ls -la
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag cicd-app:$(date +%s)
