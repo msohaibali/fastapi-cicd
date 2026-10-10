@@ -50,7 +50,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
       
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cicd-app:$(date +%s)
+      run: docker build . --file Dockerfile --tag msohaibali/cicd-app:$(date +%s)
 
     - name: Push the Docker image
-      run: docker push cicd-app:$(date +%s)
+      run: docker push msohaibali/cicd-app:$(date +%s)
