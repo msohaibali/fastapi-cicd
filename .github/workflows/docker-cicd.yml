@@ -10,27 +10,27 @@ permissions:
   contents: read
 
 jobs:
-  # lint:
-  #   name: Lint Code via Ruff
-  #   runs-on: ubuntu-slim
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v7
+  lint:
+    name: Lint Code via Ruff
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
       
-  #     - name: Setup Python
-  #       uses: actions/setup-python@v7
-  #       with:
-  #           python-version: "3.13"
-  #           cache: pip
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+            python-version: "3.13"
+            cache: pip
 
-  #     - name: Install Ruff
-  #       run: pip install ruff
+      - name: Install Ruff
+        run: pip install ruff
 
-  #     - name: Check Code via Ruff
-  #       run: ruff check .
+      - name: Check Code via Ruff
+        run: ruff check .
 
-  #     - name: Format the Code via Ruff 
-  #       run: ruff format --check .
+      - name: Format the Code via Ruff 
+        run: ruff format --check .
   
   build:
     name: Build the Docker Image
@@ -54,3 +54,9 @@ jobs:
 
     - name: Push the Docker image
       run: docker push msohaibali/cicd-app:${{ vars.APP_VERSION }}
+
+    - name: Trigger the Render Hook to Run Latest Version
+      env:
+        HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+        curl -fsS -X POST "${HOOK_URL}"
