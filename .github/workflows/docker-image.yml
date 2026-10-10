@@ -14,5 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
+    - name: Verify Directory
+      run: |
+          echo "Current directory:"
+          pwd
+          echo "Workspace: $GITHUB_WORKSPACE"
+          ls -la
+    
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag cicd-app:$(date +%s)
