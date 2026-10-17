@@ -33,9 +33,6 @@ pipeline {
 
         stage('Deploy') {
             // Optional condition: Only deploy if running on the main branch
-            when {
-                branch 'main'
-            }
             steps {
                 echo 'Deploying application to the production server...'
                 // sh './deploy.sh'
